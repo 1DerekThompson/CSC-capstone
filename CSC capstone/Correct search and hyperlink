@@ -1,0 +1,92 @@
+<?php
+
+$database_file = 'sqlite:inventory.sqlite';
+$mysql = new PDO($database_file);
+
+if($_POST && isset($_POST['search'])) {
+	echo "<br>\n";
+	$query = $mysql->prepare('SELECT * FROM Items WHERE Name = :partname');
+	$subst = array ('partname' => $_POST['search']);
+    $result = $query->execute($subst);
+ if($_POST['search'] == "") {
+	 echo "You didn't search for anything.";
+	 
+ }
+ else {
+/*      echo "<TABLE>";
+		echo "<tr>";
+		//echo "<td>id</td>";
+		echo "<td>Name</td>";
+		//echo "<td>Amount</td>";
+		//echo "<td>Detail</td>";
+		echo"</tr>";
+*/
+	$tempVar = "";
+		if (!$row = $query->fetch()){
+			echo "NO RESULTS.";
+		}
+		else{
+			$tempVar = $row;
+			while ($row = $query->fetch()) {
+		if ($tempVar != ""){
+			echo "<TABLE>";
+		echo "<tr>";
+		echo "<td>id</td>";
+		echo "<td>Name</td>";
+		echo "<td>Amount</td>";
+		echo "<td>Detail</td>";
+		echo"</tr>";
+		}
+	/*while ($row = $query->fetch()) {
+		if ($tempVar != ""){
+			echo "<TABLE>";
+		echo "<tr>";
+		//echo "<td>id</td>";
+		echo "<td>Name</td>";
+		//echo "<td>Amount</td>";
+		//echo "<td>Detail</td>";
+		echo"</tr>";
+		*/	
+		$tempVar = "";
+		echo"<tr>";
+		echo "<td>$row[id]</td>";
+		echo "<td>".$row['Name']."</td>";
+		$count = 0;
+		$link= "https://www.google.com";
+			if ($count == 0 ) {
+				echo '<td><a href="'.$link. '">'.$row['Name']."</a></td>";
+			}
+			else{
+				echo "<td>" . $row['Name'] . "</td>";
+			}
+			$count++;	
+		echo "</tr>";
+		echo "</TABLE>";
+		
+		}
+	}
+			
+/*echo"<tr>";
+//echo "<td>$row[id]</td>";
+echo "<td>".$row['Name']."</td>";
+$count = 0;
+$link= "https://www.google.com";
+	if ($count == 0 ) {
+    echo '<td><a href="'.$link. '">'.$row['Name']."</a></td>";
+	}else{
+		  echo "<td>" . $row['Name'] . "</td>";
+		 }
+		$count++;
+		//echo "<td>$row[Amount]</td>";
+		//echo "<td>$row[Detail]</td>";		
+		echo "</tr>";
+		}
+		*/
+
+	
+	//http://stackoverflow.com/questions/15455593/how-to-add-a-href-link-in-php
+	//http://stackoverflow.com/questions/20958109/table-column-to-hyperlink
+	//The websites above were used for referencing the hyperlink creation in my program.
+	
+	
+?>
